@@ -1,5 +1,5 @@
 import 'bootstrap/dist/js/bootstrap.js';
-import 'bootswatch/dist/darkly/bootstrap.min.css';
+import 'bootswatch/dist/slate/bootstrap.min.css';
 
 import WordleMainComponent from './components/WordleMainComponent';
 import Header from './components/Header';
