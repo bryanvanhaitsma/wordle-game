@@ -8,6 +8,7 @@ function WordleMainComponent() {
   const [gameState, setGameState] = useState(initialGameState());
 
   const reset = () => setGameState(initialGameState());
+  const letterCallback = (letter) => {};
 
   return (
     <>
@@ -23,7 +24,16 @@ function WordleMainComponent() {
         </div>
       </div>
       <GameBoard rows={gameState.rows} />
-      <Keyboard />
+      <br />
+      {
+        gameState.gameOver && (
+          <>
+            <h4 className="text-center">Game completed. The answer is: {gameState.chosenWord}</h4>
+            <br />
+          </>
+        )
+      }
+      <Keyboard gameOver={gameState.gameOver} letters={gameState.letters} letterCallback={letterCallback} />
     </>
   )
 }
