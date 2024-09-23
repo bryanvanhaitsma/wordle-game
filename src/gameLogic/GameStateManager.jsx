@@ -32,7 +32,7 @@ function initialCellState() {
 
 export function initialGameState() {
   return {
-    chosenWord: getRandomWord,
+    chosenWord: getRandomWord(),
     rows: Array(NUM_ROWS).fill(Array(NUM_COLS).fill(initialCellState())),
     letters: Array(26).fill(CELL_STATE.default),
     gameOver: false,

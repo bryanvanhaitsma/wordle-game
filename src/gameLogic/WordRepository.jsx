@@ -3,6 +3,6 @@ const words = [
 ];
 
 export function getRandomWord() {
-  const randomIndex = Math.floor(Math.random() + words.length);
+  const randomIndex = Math.floor(Math.random() * words.length);
   return words[randomIndex].toUpperCase();
 }

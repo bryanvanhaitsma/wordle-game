@@ -1,7 +1,7 @@
 import React from 'react'
 import { getIndexOfLetter } from '../gameLogic/GameStateManager';
 
-function Keyboard({gameOver, letters, letterCallback}) {
+function Keyboard({gameOver, letters, letterCallback, enterCallback, deleteCallback}) {
 
   const keyArrangement = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -30,6 +30,10 @@ function Keyboard({gameOver, letters, letterCallback}) {
           </div>
         ))
       }
+      <div className="col-12 text-center">
+        <button style={{margin: '2px'}} className="btn btn-light" onClick={enterCallback} disabled={gameOver}>Enter</button>
+        <button style={{margin: '2px'}} className="btn btn-light" onClick={deleteCallback} disabled={gameOver}>Del</button>
+      </div>
     </>
   )
 }
