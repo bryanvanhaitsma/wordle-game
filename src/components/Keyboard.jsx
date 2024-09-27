@@ -19,7 +19,7 @@ function Keyboard({gameOver, letters, letterCallback, enterCallback, deleteCallb
                 <button
                   style={{margin: '2px'}}
                   key={'cell_' + rowIndex + '_' + letterIndex}
-                  className={'btn btn-lg ' + letters[getIndexOfLetter[letter]].keyboardClassName}
+                  className={'btn btn-lg ' + letters[getIndexOfLetter(letter)].keyboardClassName}
                   onClick={() => letterCallback(letter) }
                   disabled={gameOver}
                 >

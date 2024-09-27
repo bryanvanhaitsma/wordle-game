@@ -2,13 +2,21 @@ import React, {useState} from 'react';
 
 import Keyboard from './Keyboard';
 import GameBoard from './GameBoard';
-import { initialGameState } from '../gameLogic/GameStateManager';
+import { gameStateAfterDeletePressed, gameStateAfterEnterPressed, gameStateAfterLetterPressed, initialGameState } from '../gameLogic/GameStateManager';
 
 function WordleMainComponent() {
   const [gameState, setGameState] = useState(initialGameState());
 
   const reset = () => setGameState(initialGameState());
-  const letterCallback = (letter) => {};
+  const letterCallback = (letter) => {
+    setGameState(gameStateAfterLetterPressed(gameState, letter));
+  };
+  const enterCallback = () => {
+    setGameState(gameStateAfterEnterPressed(gameState));
+  };
+  const deleteCallback = () => {
+    setGameState(gameStateAfterDeletePressed(gameState));
+  };
 
   return (
     <>
@@ -33,7 +41,13 @@ function WordleMainComponent() {
           </>
         )
       }
-      <Keyboard gameOver={gameState.gameOver} letters={gameState.letters} letterCallback={letterCallback} />
+      <Keyboard 
+        gameOver={gameState.gameOver} 
+        letters={gameState.letters} 
+        letterCallback={letterCallback}
+        enterCallback={enterCallback}
+        deleteCallback={deleteCallback}
+      />
     </>
   )
 }

@@ -35,10 +35,77 @@ export function initialGameState() {
     chosenWord: getRandomWord(),
     rows: Array(NUM_ROWS).fill(Array(NUM_COLS).fill(initialCellState())),
     letters: Array(26).fill(CELL_STATE.default),
+    currentRow: 0,
+    currentCol: 0,
     gameOver: false,
   }
 }
 
+
 export function getIndexOfLetter(letter) {
   return letter.charCodeAt(0) - 'A'.charCodeAt(0);
+}
+
+
+export function gameStateAfterLetterPressed(gameState, letter) {
+  if (gameState.currentCol === NUM_COLS || gameState.gameOver) {
+    return gameState;
+  }
+  const newRows = JSON.parse(JSON.stringify(gameState.rows));
+  newRows[gameState.currentRow][gameState.currentCol] = {
+    ...newRows[gameState.currentRow][gameState.currentCol],
+    letter: letter
+  };
+
+  return {
+    ...gameState,
+    rows: newRows,
+    currentCol: gameState.currentCol + 1,
+  };
+}
+
+
+export function gameStateAfterEnterPressed(gameState) {
+  if (gameState.currentCol !== NUM_COLS || gameState.gameOver) {
+    return gameState;
+  } 
+  const newRows = JSON.parse(JSON.stringify(gameState.rows));
+  const newLetters = JSON.parse(JSON.stringify(gameState.letters));
+  let allCorrect = true;
+  const currentRowArray = newRows[gameState.currentRow];
+  for (let i = 0; i < NUM_COLS; i++) {
+    if (gameState.chosenWord.charAt(i) === currentRowArray[i].letter) {
+      currentRowArray[i].state = CELL_STATE.correctPosition;
+    } else if (gameState.chosenWord.indexOf(currentRowArray[i].letter) !== -1) {
+      currentRowArray[i].state = CELL_STATE.correctLetter;
+      allCorrect = false;
+    } else {
+      currentRowArray[i].state = CELL_STATE.incorrectLetter;
+      allCorrect = false;
+    }
+  }
+  
+  return {
+    ...gameState,
+    rows: newRows,
+    letters: newLetters,
+    currentRow: gameState.currentRow + 1,
+    currentCol: 0,
+    gameOver: allCorrect || gameState.currentRow - 1 === NUM_ROWS,
+  }
+}
+
+
+export function gameStateAfterDeletePressed(gameState) {
+  if (gameState.currentCol === 0 || gameState.gameOver) {
+    return gameState;
+  } 
+  const newRows = JSON.parse(JSON.stringify(gameState.rows));
+  newRows[gameState.currentRow][gameState.currentCol - 1] = initialCellState();
+
+  return {
+    ...gameState,
+    rows: newRows,
+    currentCol: gameState.currentCol - 1,
+  };
 }
