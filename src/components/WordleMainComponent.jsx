@@ -1,18 +1,32 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import Keyboard from './Keyboard';
 import GameBoard from './GameBoard';
 import { gameStateAfterDeletePressed, gameStateAfterEnterPressed, gameStateAfterLetterPressed, initialGameState } from '../gameLogic/GameStateManager';
+import { getRandomWord } from '../gameLogic/WordRepository';
 
 function WordleMainComponent() {
   const [gameState, setGameState] = useState(initialGameState());
-
   const reset = () => setGameState(initialGameState());
+
+  useEffect(() => {
+    async function loadWord() {      
+      const word = await getRandomWord();
+      setGameState((curGameState) => ({
+        ...curGameState,
+        chosenWord: word,
+      }));
+    }
+    loadWord();
+
+  }, []);
+
   const letterCallback = (letter) => {
     setGameState(gameStateAfterLetterPressed(gameState, letter));
   };
-  const enterCallback = () => {
-    setGameState(gameStateAfterEnterPressed(gameState));
+  const enterCallback = async () => {
+    const newState = await gameStateAfterEnterPressed(gameState);
+    setGameState(newState);
   };
   const deleteCallback = () => {
     setGameState(gameStateAfterDeletePressed(gameState));

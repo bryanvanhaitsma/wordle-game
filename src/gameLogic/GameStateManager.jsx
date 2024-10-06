@@ -1,4 +1,4 @@
-import { getRandomWord } from "./WordRepository";
+import { isValidWord } from "./WordRepository";
 
 const NUM_ROWS = 6
 const NUM_COLS = 5
@@ -32,7 +32,7 @@ function initialCellState() {
 
 export function initialGameState() {
   return {
-    chosenWord: getRandomWord(),
+    chosenWord: '',
     rows: Array(NUM_ROWS).fill(Array(NUM_COLS).fill(initialCellState())),
     letters: Array(26).fill(CELL_STATE.default),
     currentRow: 0,
@@ -48,6 +48,7 @@ export function getIndexOfLetter(letter) {
 
 
 export function gameStateAfterLetterPressed(gameState, letter) {
+  console.log(gameState);
   if (gameState.currentCol === NUM_COLS || gameState.gameOver) {
     return gameState;
   }
@@ -56,6 +57,7 @@ export function gameStateAfterLetterPressed(gameState, letter) {
     ...newRows[gameState.currentRow][gameState.currentCol],
     letter: letter
   };
+  console.log(newRows);
 
   return {
     ...gameState,
@@ -65,12 +67,26 @@ export function gameStateAfterLetterPressed(gameState, letter) {
 }
 
 
-export function gameStateAfterEnterPressed(gameState) {
+export async function gameStateAfterEnterPressed(gameState) {
+  
   if (gameState.currentCol !== NUM_COLS || gameState.gameOver) {
     return gameState;
   } 
+
+  // if word not found in word shake and clear line
+  const currentGuess = gameState.rows[gameState.currentRow].map(obj => obj.letter).join('');
+  const valid = await isValidWord(currentGuess);
+  if (valid) {
+    console.log("word is valid")
+  } else {
+    console.log("not a valid word");
+  }
+
+  return gameState;
+
   const newRows = JSON.parse(JSON.stringify(gameState.rows));
   const newLetters = JSON.parse(JSON.stringify(gameState.letters));
+  console.log("newRows: " + newRows, "newLetters: " + newLetters);
   let allCorrect = true;
   const currentRowArray = newRows[gameState.currentRow];
   for (let i = 0; i < NUM_COLS; i++) {
