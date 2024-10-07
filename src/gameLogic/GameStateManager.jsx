@@ -38,6 +38,7 @@ export function initialGameState() {
     currentRow: 0,
     currentCol: 0,
     gameOver: false,
+    rowShake: false,
   }
 }
 
@@ -57,7 +58,6 @@ export function gameStateAfterLetterPressed(gameState, letter) {
     ...newRows[gameState.currentRow][gameState.currentCol],
     letter: letter
   };
-  console.log(newRows);
 
   return {
     ...gameState,
@@ -76,11 +76,21 @@ export async function gameStateAfterEnterPressed(gameState) {
   // if word not found in word shake and clear line
   const currentGuess = gameState.rows[gameState.currentRow].map(obj => obj.letter).join('');
   const valid = await isValidWord(currentGuess);
-  if (valid) {
-    console.log("word is valid")
-  } else {
-    console.log("not a valid word");
-  }
+  if (!valid) {
+    const updatedRows = gameState.rows.map((row, index) => {
+      if (index === gameState.currentRow) {
+        return Array(NUM_COLS).fill(initialCellState());
+      } 
+      return row; 
+    })
+    return {
+      ...gameState,
+      currentCol: 0,
+      rowShake: true,
+      rows: updatedRows,
+    };
+  } 
+  
 
   return gameState;
 

@@ -45,7 +45,7 @@ function WordleMainComponent() {
           <button className="btn btn-warning" onClick={reset}>RESET</button>
         </div>
       </div>
-      <GameBoard rows={gameState.rows} />
+      <GameBoard rows={gameState.rows} rowShake={gameState.rowShake} currentRow={gameState.currentRow} />
       <br />
       {
         gameState.gameOver && (

@@ -1,10 +1,11 @@
 import React from 'react';
+import "../styles/styles.css";
 
-function GameBoard({ rows }) {
+function GameBoard({ rows, rowShake, currentRow }) {
   return (
     <>
       {rows.map((row, rowIndex) => (
-        <div key={'row_' + rowIndex} className="col-12 text-center">
+        <div key={'row_' + rowIndex} className={rowShake && currentRow === rowIndex ? "col-12 text-center shake-animation" : "col-12 text-center"}>
           {row.map((cell, cellIndex) => (
             <button
               style={{margin: "2px", fontFamily: 'Courier New'}}
