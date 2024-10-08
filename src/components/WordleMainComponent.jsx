@@ -31,6 +31,14 @@ function WordleMainComponent() {
   const deleteCallback = () => {
     setGameState(gameStateAfterDeletePressed(gameState));
   };
+  const animationEndCallback = () => {
+    setGameState(curGameState => {
+      return {
+        ...curGameState,
+        rowShake: false,
+      }
+    })
+  }
 
   return (
     <>
@@ -45,7 +53,12 @@ function WordleMainComponent() {
           <button className="btn btn-warning" onClick={reset}>RESET</button>
         </div>
       </div>
-      <GameBoard rows={gameState.rows} rowShake={gameState.rowShake} currentRow={gameState.currentRow} />
+      <GameBoard 
+        rows={gameState.rows} 
+        rowShake={gameState.rowShake} 
+        currentRow={gameState.currentRow} 
+        onAnimationEnd={animationEndCallback}
+      />
       <br />
       {
         gameState.gameOver && (

@@ -49,7 +49,6 @@ export function getIndexOfLetter(letter) {
 
 
 export function gameStateAfterLetterPressed(gameState, letter) {
-  console.log(gameState);
   if (gameState.currentCol === NUM_COLS || gameState.gameOver) {
     return gameState;
   }
@@ -90,9 +89,6 @@ export async function gameStateAfterEnterPressed(gameState) {
       rows: updatedRows,
     };
   } 
-  
-
-  return gameState;
 
   const newRows = JSON.parse(JSON.stringify(gameState.rows));
   const newLetters = JSON.parse(JSON.stringify(gameState.letters));

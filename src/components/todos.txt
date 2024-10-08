@@ -1,0 +1,2 @@
+1. disable keyboard letters once eliminated
+2. if two e's are in the word and guessed color them correctly. 
