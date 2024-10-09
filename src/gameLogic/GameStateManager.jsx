@@ -96,13 +96,18 @@ export async function gameStateAfterEnterPressed(gameState) {
   let allCorrect = true;
   const currentRowArray = newRows[gameState.currentRow];
   for (let i = 0; i < NUM_COLS; i++) {
+    const curLetter = currentRowArray[i].letter.toLowerCase();  // turn letter to lowercase
     if (gameState.chosenWord.charAt(i) === currentRowArray[i].letter) {
       currentRowArray[i].state = CELL_STATE.correctPosition;
+      const letterIndex = curLetter.charCodeAt(0) - 97; // turn letter to integer of the alphabet, zero-based
+      newLetters[letterIndex] = CELL_STATE.correctPosition;
     } else if (gameState.chosenWord.indexOf(currentRowArray[i].letter) !== -1) {
       currentRowArray[i].state = CELL_STATE.correctLetter;
       allCorrect = false;
     } else {
       currentRowArray[i].state = CELL_STATE.incorrectLetter;
+      const letterIndex = curLetter.charCodeAt(0) - 97;
+      newLetters[letterIndex] = CELL_STATE.incorrectLetter;
       allCorrect = false;
     }
   }
