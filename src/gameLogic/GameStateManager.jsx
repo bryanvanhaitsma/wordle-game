@@ -38,6 +38,7 @@ export function initialGameState() {
     currentRow: 0,
     currentCol: 0,
     gameOver: false,
+    gameReset: false,
     rowShake: false,
   }
 }
@@ -45,6 +46,17 @@ export function initialGameState() {
 
 export function getIndexOfLetter(letter) {
   return letter.charCodeAt(0) - 'A'.charCodeAt(0);
+}
+
+
+function letterCount(word, letter) {
+  let count = 0;
+  for (let char of word) {
+    if (char === letter) {
+      count++;
+    }
+  }
+  return count;
 }
 
 
@@ -92,24 +104,38 @@ export async function gameStateAfterEnterPressed(gameState) {
 
   const newRows = JSON.parse(JSON.stringify(gameState.rows));
   const newLetters = JSON.parse(JSON.stringify(gameState.letters));
-  console.log("newRows: " + newRows, "newLetters: " + newLetters);
   let allCorrect = true;
   const currentRowArray = newRows[gameState.currentRow];
+  
   for (let i = 0; i < NUM_COLS; i++) {
-    const curLetter = currentRowArray[i].letter.toLowerCase();  // turn letter to lowercase
-    if (gameState.chosenWord.charAt(i) === currentRowArray[i].letter) {
-      currentRowArray[i].state = CELL_STATE.correctPosition;
-      const letterIndex = curLetter.charCodeAt(0) - 97; // turn letter to integer of the alphabet, zero-based
-      newLetters[letterIndex] = CELL_STATE.correctPosition;
-    } else if (gameState.chosenWord.indexOf(currentRowArray[i].letter) !== -1) {
-      currentRowArray[i].state = CELL_STATE.correctLetter;
-      allCorrect = false;
-    } else {
+    const curLetter = currentRowArray[i].letter;
+    const countInAnswer = letterCount(gameState.chosenWord, curLetter);
+    const countInGuess = letterCount(currentGuess, curLetter);
+    console.log(countInAnswer, countInGuess);
+
+
+    if (countInAnswer === 0) {
+
       currentRowArray[i].state = CELL_STATE.incorrectLetter;
-      const letterIndex = curLetter.charCodeAt(0) - 97;
+      const letterIndex = curLetter.charCodeAt(0) - 65;
       newLetters[letterIndex] = CELL_STATE.incorrectLetter;
       allCorrect = false;
+
+    } else if (countInAnswer === 1) {
+
+      if (gameState.chosenWord.charAt(i) === curLetter) {
+        currentRowArray[i].state = CELL_STATE.correctPosition;
+        const letterIndex = curLetter.charCodeAt(0) - 65; 
+        newLetters[letterIndex] = CELL_STATE.correctPosition;
+      } else if (gameState.chosenWord.indexOf(curLetter) !== -1) {
+        currentRowArray[i].state = CELL_STATE.correctLetter;
+        allCorrect = false;
+      }
+
     }
+
+
+    
   }
   
   return {

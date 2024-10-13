@@ -7,19 +7,26 @@ import { getRandomWord } from '../gameLogic/WordRepository';
 
 function WordleMainComponent() {
   const [gameState, setGameState] = useState(initialGameState());
-  const reset = () => setGameState(initialGameState());
+  
+  async function loadWord() {      
+    const word = await getRandomWord();
+    setGameState((curGameState) => ({
+      ...curGameState,
+      chosenWord: word,
+    }));
+  }
 
-  useEffect(() => {
-    async function loadWord() {      
-      const word = await getRandomWord();
-      setGameState((curGameState) => ({
-        ...curGameState,
-        chosenWord: word,
-      }));
-    }
+  // load initial word
+  useEffect(() => { 
     loadWord();
-
   }, []);
+  
+  
+  function reset() {
+    setGameState(initialGameState());
+    loadWord();
+  } 
+
 
   const letterCallback = (letter) => {
     setGameState(gameStateAfterLetterPressed(gameState, letter));

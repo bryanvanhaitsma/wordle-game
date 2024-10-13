@@ -1,2 +1,4 @@
-1. disable keyboard letters once eliminated
-2. if two e's are in the word and guessed color them correctly. 
+
+* if two e's in the answer and one in the guess
+* if two e's in the answer and two in the guess
+* if two e's in the guess but one 'e' in the answer
